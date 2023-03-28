@@ -1,15 +1,15 @@
 # Red7 
-## 1 Objetivo 
+## 1. Objetivo 
 Desenvolvimento de um jogo distribuído para a disciplina Engenharia de Software I (INE5417) que suporte a disputa de partidas de Red7 na modalidade usuário contra usuário, estando os usuários em máquinas diferentes. 
 
-## 2 Definições, abreviaturas 
+## 2. Definições, abreviaturas 
 + Paleta: termo que se refere à cor que rege aquela rodada;
 + Rodada: designa a vez de um determinado jogador, na qual ele pode fazer um conjunto de ações que pode levar a sua vitória na rodada;
 + Regra: designa uma sentença que cada cor possui, a qual só tem efeito quando essa cor é colocada na paleta e rege o jogo até que a mesma perca o efeito;
 + Tela: diz respeito à região da mesa em que o jogador põe suas cartas;
 + Partida: outro termo para jogatina, ou seja, o conjunto de rodadas do jogo.
 
-## 3 Explicação do jogo
+## 3. Explicação do jogo
 O programa simula uma jogatina de Red7, um jogo de cartas da Asmadi Games e distribuído no Brasil pela PaperGames. O original permite de 2 a 4 jogadores, porém para reduzir a complexidade de desenvolvimento, esse projeto foi adaptado para apenas 2 jogadores. 
 O jogo possui um baralho com 49 cartas, sendo que cada carta possui um número de 1 a 7 e uma de sete cores (vermelho, laranja, amarelo, verde, azul, índigo e roxo). Existe apenas uma carta para cada combinação. A ordem de grandeza das cartas, qual carta é mais forte que outra, vai crescendo dos números 1 ao 7 e do roxo para o vermelho. A maior carta do jogo é o 7 vermelho e a menor o 1 roxo. Cada cor possui uma regra associada a ela, descritas na tabela a seguir: 
   
@@ -25,7 +25,7 @@ Ambas as ações só podem ser feitas uma vez durante a rodada, em qualquer orde
 Depois que as ações terminam e o jogador vence a rodada, o próximo jogador inicia sua rodada. Caso o primeiro jogador perca, o outro jogador ganha a partida.
 Os critérios de desempate, quando ambas as telas dos jogadores vençam pela regra da paleta, é a grandeza das cartas, sendo o primeiro aspecto considerado os números maiores e o segundo as cores mais altas.  
   
-## 4 Referências: 
+## 4. Referências: 
 https://papergames.com.br/red7/
 Apresentação das regras do jogo (video do canal Vem Ka Jogar): 
 https://www.youtube.com/watch?v=qcX-XYdsKAY
