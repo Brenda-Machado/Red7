@@ -94,7 +94,7 @@ class Interface:
 		self.butttonFrame.pack()
 		self.paletaFrame.place(x=1000, y=500)
 		self.handFrame.place(x=100, y=700)
-		self.butttonFrame.place(x=300, y=650)
+		self.butttonFrame.place(x=300, y=600)
 	
 	def passarTurno(self):
 		self.messageView.clear()
@@ -105,10 +105,12 @@ class Interface:
 		
 	def baixarCarta(self):
 		self.messageView.clear()
-		self.messageView.append(Label(self.tableFrame, text="Baixou a carta"))
+		self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
 		self.messageView[0].grid(row=0, column=0)
 		self.messageView[0].place(x=500, y=500)
 		self.messageFrame.pack()
+		for i in range(0, 7):
+			self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i))
 
 	def mudarPaleta(self):
 		self.messageView.clear()
@@ -117,5 +119,15 @@ class Interface:
 		self.messageView[0].place(x=500, y=500)
 		self.messageFrame.pack()
 		self.definePaleta(random.randint(0,6))
-		
+
+	def selecionarCarta(self, i):
+		self.handView[i].place(x=500, y=500)
+		for i in range(0,7):
+			self.handView[i].unbind("<Button-1>")
+		self.messageView.clear()
+		self.messageView.append(Label(self.tableFrame, text="     Baixou a carta      "))
+		self.messageView[0].grid(row=0, column=0)
+		self.messageView[0].place(x=500, y=500)
+		self.messageFrame.pack()
+
 Interface()
