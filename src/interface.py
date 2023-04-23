@@ -1,8 +1,13 @@
 from tkinter import *
+from tkinter import messagebox
+from tkinter import simpledialog
 from PIL import Image, ImageTk
+from dog.dog_interface import DogPlayerInterface
+from dog.dog_actor import DogActor
 import random
 
-class Interface:
+
+class Interface(DogPlayerInterface):
 	def __init__(self):
 		self.mainWindow = Tk()
 		self.mainWindow.title("Red7")
@@ -25,6 +30,10 @@ class Interface:
 		self.loadImages()
 		self.loadBaralho()
 		self.telaInicial()
+		player_name = simpledialog.askstring(title="Player identification", prompt="Qual o seu nome?")
+		self.dog_server_interface = DogActor()
+		message = self.dog_server_interface.initialize(player_name, self)
+		messagebox.showinfo(message=message)
 		self.mainWindow.mainloop()
 
 	def loadImages(self):
@@ -65,7 +74,7 @@ class Interface:
 			self.handView[i].grid(row=0, column=i)
 	
 	def createButtonIniciar(self):
-		self.initView.append(Button(self.butttonFrame, text="Iniciar", command=self.iniciar))
+		self.initView.append(Button(self.butttonFrame, text="Iniciar", command=self.iniciarPartida))
 		self.initView[1].grid(row=0, column=1)
 	
 	def createButtons(self):
@@ -81,6 +90,13 @@ class Interface:
 		self.createButtonIniciar()
 		self.initFrame.pack()
 		self.butttonFrame.pack()
+	
+	def iniciarPartida(self):
+		start_status = self.dog_server_interface.start_match(2)
+		message = start_status.get_message()
+		messagebox.showinfo(message=message)
+		if message == "Partida iniciada":
+			self.iniciar()
 	
 	def iniciar(self):
 		self.initFrame.destroy()
@@ -121,13 +137,7 @@ class Interface:
 		self.definePaleta(random.randint(0,6))
 
 	def selecionarCarta(self, i):
-		self.handView[i].place(x=500, y=500)
-		for i in range(0,7):
-			self.handView[i].unbind("<Button-1>")
 		self.messageView.clear()
-		self.messageView.append(Label(self.tableFrame, text="     Baixou a carta      "))
-		self.messageView[0].grid(row=0, column=0)
-		self.messageView[0].place(x=500, y=500)
-		self.messageFrame.pack()
+		self.handView[i].place(x=500, y=500)
 
 Interface()
