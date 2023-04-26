@@ -36,5 +36,5 @@ https://papergames.com.br/red7/
 Apresentação das regras do jogo (video do canal Vem Ka Jogar): 
 https://www.youtube.com/watch?v=qcX-XYdsKAY
 
-https://github.com/Brenda-Machado/Red7/actions/workflows/main.yml/badge.svg
+![image](https://github.com/Brenda-Machado/Red7/actions/workflows/main.yml/badge.svg)
 
