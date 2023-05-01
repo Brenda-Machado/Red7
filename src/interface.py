@@ -97,7 +97,11 @@ class Interface(DogPlayerInterface):
 		messagebox.showinfo(message=message)
 		if message == "Partida iniciada":
 			self.iniciar()
-	
+
+	def receive_start(self, start_status):
+		message = start_status.get_message()
+		messagebox.showinfo(message=message)
+
 	def iniciar(self):
 		self.initFrame.destroy()
 		self.createTable()
