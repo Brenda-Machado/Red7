@@ -1,3 +1,8 @@
+"""
+Brenda Silva Machado
+Descrição: Classe responsável pela interface do usuário e conexão com o DOG Server
+"""
+
 from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
@@ -143,5 +148,3 @@ class Interface(DogPlayerInterface):
 	def selecionarCarta(self, i):
 		self.messageView.clear()
 		self.handView[i].place(x=500, y=500)
-
-Interface()
