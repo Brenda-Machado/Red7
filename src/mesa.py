@@ -295,6 +295,11 @@ class Mesa():
                     apareceu += 1
             if apareceu > repeticoes:
                 repeticoes = apareceu
+                cartaConsiderada = (i, i)
+        if id == 1:
+            self.cartaConsiderada1 = cartaConsiderada
+        else:
+            self.cartaConsiderada2 = cartaConsiderada
         return repeticoes
     
     def contaCartasMesmaCor(self, id):
@@ -310,6 +315,11 @@ class Mesa():
                     apareceu += 1
             if apareceu > mesma_cor:
                 mesma_cor = apareceu
+                cartaConsiderada = (i, i)
+        if id == 1:
+            self.cartaConsiderada1 = cartaConsiderada
+        else:
+            self.cartaConsiderada2 = cartaConsiderada
         return mesma_cor
     
     def contaCartasPares(self, id):
@@ -337,19 +347,31 @@ class Mesa():
     def contaCartasSequencia(self, id):
         if id == 1:
             mesa = list(self.mesaJogador1.values())
+
         else:
-            mesa = list(self.mesaJogador1.values())
+            mesa = list(self.mesaJogador2.values())
         mesa.sort(key=lambda carta: carta[1])  # Ordena as cartas pelo número
+        
         maior_sequencia = 1
         sequencia_atual = 1
+        maior_carta_sequencia = mesa[0][1]  # Inicializa a maior carta com a primeira carta da mesa
+        
         for i in range(1, len(mesa)):
             if mesa[i][1] == mesa[i-1][1] + 1:
                 sequencia_atual += 1
                 if sequencia_atual > maior_sequencia:
                     maior_sequencia = sequencia_atual
+                    maior_carta_sequencia = mesa[i][1]  # Atualiza a maior carta da sequência
             else:
                 sequencia_atual = 1
+        
+        cartaConsiderada = maior_carta_sequencia  # Salva a maior carta da maior sequência
+        if id == 1:
+            self.cartaConsiderada1 = cartaConsiderada
+        else:
+            self.cartaConsiderada2 = cartaConsiderada
         return maior_sequencia
+
     
     def contaCartasMenor4(self, id):
         if id == 1:
