@@ -13,6 +13,8 @@ class Mesa():
         self.mesaJogador2 = {}
         self.paleta = None
         self.regraAtual = 0
+        self.cartaConsiderada1 = None
+        self.cartaConsiderada2 = None # cartas que servem para a avaliação da regra dentro das flags
     
     def getMesaJogador1(self):
         return self.mesaJogador1
@@ -65,8 +67,8 @@ class Mesa():
                 return False
     
     def avaliaRegraLaranja(self, jogadorVez, jogadorOutro):
-        num_j_vez = self.contaRepetição(jogadorVez.id)
-        num_j_o = self.contaRepetição(jogadorOutro.id)
+        num_j_vez = self.contaRepeticao(jogadorVez.id)
+        num_j_o = self.contaRepeticao(jogadorOutro.id)
         if num_j_vez != num_j_o:
             if num_j_vez > num_j_o:
                 return True
@@ -211,14 +213,151 @@ class Mesa():
     def maiorMesa(self, id, flag):
         if id == 1:
             mesa = self.mesaJogador1
+            cartaConsiderada = self.cartaConsiderada1
         else:
             mesa = self.mesaJogador2
+            cartaConsiderada = self.cartaConsiderada2
         
-        if flag == 'vermelho':
+        if flag == 'vermelho' or flag == 'azul':
             maior = 0
             for carta in mesa:
                 if carta[1] > maior:
                     maior = carta[1]
             return maior
+        elif flag == 'laranja' or flag == 'indigo':
+            return cartaConsiderada[1]
+        elif flag == 'amarelo':
+            cor = cartaConsiderada[0]
+            maior = 0
+            for carta in mesa:        
+                if carta[0] == cor and carta[1] > maior:
+                    maior = carta[1]
+            return maior
+        elif flag == 'verde':
+            maior = 0
+            for carta in mesa:
+                if carta[1] > maior and carta[1] % 2 == 0:
+                    maior = carta[1]
+            return maior
+        elif flag == 'roxa':
+            maior = 0
+            for carta in mesa:
+                if carta[1] > maior and carta[1] < 4:
+                    maior = carta[1]
+            return maior
+    
+    def menorCor(self, id, flag):
+        if id == 1:
+            mesa = self.mesaJogador1
+            cartaConsiderada = self.cartaConsiderada1
+        else:
+            mesa = self.mesaJogador2
+            cartaConsiderada = self.cartaConsiderada2
+        
+        if flag == 'vermelho' or flag == 'azul':
+            menor = 7
+            for carta in mesa:
+                if carta[0] < menor:
+                    menor = carta[0]
+            return menor
         elif flag == 'laranja':
-            
+            numero = cartaConsiderada[1]
+            menor = 7
+            for carta in mesa:
+                if carta[1] == numero and carta[0] < menor:
+                    menor = carta[0]
+            return menor
+        elif flag == 'amarela' or flag == 'indigo':
+            return cartaConsiderada[0]
+        elif flag == 'verde':
+            menor = 7
+            for carta in mesa:
+                if carta[0] < menor and carta[1] % 2 == 0:
+                    menor = carta[0]
+            return menor
+        elif flag == 'roxo':
+            menor = 7
+            for carta in mesa:
+                if carta[0] < menor and carta[1] < 4:
+                    menor = carta[0]
+            return menor
+    
+    def contaRepeticao(self, id):
+        if id == 1:
+            mesa = self.mesaJogador1
+        else:
+            mesa = self.mesaJogador2
+        repeticoes = 0
+        for i in range(1, 7):
+            apareceu = 0
+            for carta in mesa:
+                if carta[1] == 1:
+                    apareceu += 1
+            if apareceu > repeticoes:
+                repeticoes = apareceu
+        return repeticoes
+    
+    def contaCartasMesmaCor(self, id):
+        if id == 1:
+            mesa = self.mesaJogador1
+        else:
+            mesa = self.mesaJogador2
+        mesma_cor = 0
+        for i in range(1, 7):
+            apareceu = 0
+            for carta in mesa:
+                if carta[0] == i:
+                    apareceu += 1
+            if apareceu > mesma_cor:
+                mesma_cor = apareceu
+        return mesma_cor
+    
+    def contaCartasPares(self, id):
+        if id == 1:
+            mesa = self.mesaJogador1
+        else:
+            mesa = self.mesaJogador2
+        pares = 0
+        for carta in mesa:
+            if carta[1] % 2 == 0:
+                pares += 1
+        return pares
+    
+    def contaCoresDiferentes(self, id):
+        if id == 1:
+            mesa = self.mesaJogador1
+        else:
+            mesa = self.mesaJogador2
+        cores = []
+        for carta in mesa:
+            if carta[0] not in cores:
+                cores.append(carta[0])
+        return len(cores)
+    
+    def contaCartasSequencia(self, id):
+        if id == 1:
+            mesa = list(self.mesaJogador1.values())
+        else:
+            mesa = list(self.mesaJogador1.values())
+        mesa.sort(key=lambda carta: carta[1])  # Ordena as cartas pelo número
+        maior_sequencia = 1
+        sequencia_atual = 1
+        for i in range(1, len(mesa)):
+            if mesa[i][1] == mesa[i-1][1] + 1:
+                sequencia_atual += 1
+                if sequencia_atual > maior_sequencia:
+                    maior_sequencia = sequencia_atual
+            else:
+                sequencia_atual = 1
+        return maior_sequencia
+    
+    def contaCartasMenor4(self, id):
+        if id == 1:
+            mesa = self.mesaJogador1
+        else:
+            mesa = self.mesaJogador2
+        menor4 = 0
+        for carta in mesa:
+            if carta[1] < 4:
+                menor4 += 1
+        return menor4
