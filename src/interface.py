@@ -10,6 +10,9 @@ from PIL import Image, ImageTk
 from dog.dog_interface import DogPlayerInterface
 from dog.dog_actor import DogActor
 import random
+from partida import Partida
+from mesa import Mesa
+from jogador import Jogador
 
 
 class Interface(DogPlayerInterface):
@@ -31,6 +34,11 @@ class Interface(DogPlayerInterface):
 		self.handView=[]
 		self.paletaView=[]
 		self.messageView=[]
+
+		self.mesa = Mesa()
+		self.jogador1 = Jogador()
+		self.jogador2 = Jogador()
+		self.partida = None
 	
 		self.loadImages()
 		self.loadBaralho()
@@ -108,6 +116,8 @@ class Interface(DogPlayerInterface):
 		messagebox.showinfo(message=message)
 
 	def iniciar(self):
+		self.partida = Partida(self.jogador1, self.jogador2)
+		self.partida.inicioPartida()
 		self.initFrame.destroy()
 		self.createTable()
 		self.createHand()

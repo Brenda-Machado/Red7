@@ -11,7 +11,7 @@ class Mesa():
     def __init__(self):
         self.mesaJogador1 = {} # recebe uma tupla em que o primeiro é cor e o segundo é número
         self.mesaJogador2 = {}
-        self.paleta = None
+        self.paleta = Paleta()
         self.regraAtual = 0
         self.cartaConsiderada1 = None
         self.cartaConsiderada2 = None # cartas que servem para a avaliação da regra dentro das flags
@@ -25,9 +25,6 @@ class Mesa():
     def mudaRegra(self, cor):
         self.regraAtual = cor
         self.paleta.mudaRegra(cor)
-    
-    def inicioPartida(self):
-        self.paleta = Paleta()
     
     def avaliaVitoria(self):
         color = self.paleta.getCorAtual()

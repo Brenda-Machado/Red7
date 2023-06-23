@@ -4,12 +4,17 @@ Descrição: Classe que define a partida e a lógica do jogo
 """
 
 from jogador import Jogador
+import random
 
 class Partida():
     def __init__(self, jogadorVez: Jogador, jogadorOutro: Jogador):
         self.status = 0
         self.jogadorVez = jogadorVez
         self.jogadorOutro = jogadorOutro
+        self.baralho = []
+        for i in range(7):
+            for j in range(7):
+                self.baralho.append((j, i))
     
     def getStatus(self):
         return self.status
@@ -36,8 +41,18 @@ class Partida():
         self.jogadorVez.inicioPartida()
         self.jogadorVez.atualizaVez()
         self.jogadorOutro.inicioPartida()
-        self.jogadorVez.criaMao()
-        self.jogadorOutro.criaMao()
+        baralho1 = []
+        baralho2 = []
+        for i in range(7):
+            carta = random.choice(self.baralho)
+            baralho1.append({"cor": carta[0], "numero": carta[1]})
+            self.baralho.remove(carta)
+            carta = random.choice(self.baralho)
+            baralho2.append({"cor": carta[0], "numero": carta[1]})
+            self.baralho.remove(carta)
+
+        self.jogadorVez.criaMao(baralho1)
+        self.jogadorOutro.criaMao(baralho2)
     
     def atualizaMao(self, carta):
         self.jogadorVez.mao.remove(carta)
