@@ -8,11 +8,12 @@ from partida import Partida
 from carta import Carta
 
 class Mesa():
-    def __init__(self):
+    def __init__(self, partida : Partida):
         self.mesaJogador1 = {} # recebe uma tupla em que o primeiro é cor e o segundo é número
         self.mesaJogador2 = {}
         self.paleta = Paleta()
-        self.regraAtual = 0
+        self.partida = partida
+        self.regraAtual = 1
         self.cartaConsiderada1 = None
         self.cartaConsiderada2 = None # cartas que servem para a avaliação da regra dentro das flags
     
@@ -33,7 +34,7 @@ class Mesa():
         return self.regraAtual
 
     def atualizaMesa(self, carta):
-        jogador = Partida.getJogadorVez() # DECIDIR COMO VAI SER FEITA A ASSOCIAÇÂO
+        jogador = self.partida.getJogadorVez()
         if jogador.getId() == 1:
             self.mesaJogador1[carta.cor] = carta.numero
         else:
@@ -41,20 +42,20 @@ class Mesa():
     
     def avaliaVitoria(self):
         color = self.paleta.getCorAtual()
-        jogadorVez = Partida.getJogadorVez()
-        jogadorOutro = Partida.getJogadorOutro()
+        jogadorVez = self.partida.getJogadorVez()
+        jogadorOutro = self.partida.getJogadorOutro()
         resultado_avaliação = False
-        if color == 0:
+        if color == 1:
             resultado_avaliação = self.avaliaRegraVermelha(jogadorVez, jogadorOutro)
-        elif color == 1:
-            resultado_avaliação = self.avaliaRegraLaranja(jogadorVez, jogadorOutro)
         elif color == 2:
-            resultado_avaliação = self.avaliaRegraAmarela(jogadorVez, jogadorOutro)
+            resultado_avaliação = self.avaliaRegraLaranja(jogadorVez, jogadorOutro)
         elif color == 3:
-            resultado_avaliação = self.avaliaRegraVerde(jogadorVez, jogadorOutro)
+            resultado_avaliação = self.avaliaRegraAmarela(jogadorVez, jogadorOutro)
         elif color == 4:
-            resultado_avaliação = self.avaliaRegraAzul(jogadorVez, jogadorOutro)
+            resultado_avaliação = self.avaliaRegraVerde(jogadorVez, jogadorOutro)
         elif color == 5:
+            resultado_avaliação = self.avaliaRegraAzul(jogadorVez, jogadorOutro)
+        elif color == 6:
             resultado_avaliação = self.avaliaRegraIndigo(jogadorVez, jogadorOutro)
         else:
             resultado_avaliação = self.avaliaRegraRoxa(jogadorVez, jogadorOutro)

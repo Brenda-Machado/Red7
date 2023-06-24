@@ -50,6 +50,7 @@ class Interface(DogPlayerInterface):
 		self.mesa_jogador2 = []
 		self.baralho_jogador1 = []
 		self.baralho_jogador2 = []
+		self.player_local_id = None
 	
 		self.loadImages()
 		self.loadBaralho()
@@ -75,15 +76,14 @@ class Interface(DogPlayerInterface):
 		self.initView.append(Label(self.initFrame, image=self.logo))
 
 	def loadBaralho(self):
-		self.deckCards=[]
+		self.deckCards = [[None for _ in range(7)] for _ in range(7)]
 		self.deck = Image.open("images/cards_deck.png")
 		for i in range(0, 7):
-			for j in range(1, 8):
-				self.deckCards.append(ImageTk.PhotoImage(self.deck.crop((99*(j-1), 148*(i-1), 99*j, 148*i))))
+			for j in range(0, 7):
+				self.deckCards[i][j] = (ImageTk.PhotoImage(self.deck.crop((99*(j-1), 148*(i-1), 99*j, 148*i))))
 
 
 	def createTable(self):
-		print('funcionando table')
 		self.tableView.append(Label(self.tableFrame, image=self.table))
 		self.tableView[0].grid(row=0, column=0)
 
@@ -97,26 +97,14 @@ class Interface(DogPlayerInterface):
 		baralho = []
 		count = 0
 		jogador = self.partida.get_jogador(jogador_id)
-		print(jogador_id)
-		if jogador_id == 1: 
-			baralho = jogador.getMao()
-			print(baralho)
-			for carta in baralho:
-				self.baralho_jogador1.append(carta)
-				self.handView.append(Label(self.handFrame, image=(self.deckCards[carta.getCor()][carta.getNumero()])))
-				self.handView[count].grid(row=0, column=count)
-				count += 1
-				print('funcionando hand')
-
-		# elif jogador_id == self.start_status.get_local_id() and jogador_id == 2:	
-		# 	baralho = jogador.get_mao()
-		# 	print(baralho)
-		# 	for carta in baralho:
-		# 		self.baralho_jogador2.append(baralho[carta])
-		# 		self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
-		# 		self.handView[count].grid(row=0, column=count)
-		# 		count += 1
-		# 		print('funcionando hand')
+		baralho = jogador.getMao()
+		for carta in baralho:
+			cor = carta.getCor()
+			numero = carta.getNumero()	
+			print("Cor: ", cor, "Numero: ", numero)		
+			self.handView.append(Label(self.handFrame, image=self.deckCards[cor-1][numero-1]))
+			self.handView[count].grid(row = 0, column=count)
+			count += 1
 
 	def createButtonIniciar(self):
 		self.initView.append(Button(self.butttonFrame, text="Iniciar", command=self.iniciarPartida))
@@ -149,17 +137,18 @@ class Interface(DogPlayerInterface):
 	
 	def iniciar(self):
 		self.partida = Partida(Jogador(), Jogador())
-		print('funcionando criar partida')
 		self.partida.jogadorVez.initialize(self.jogador1[2])
-		print('funcionando jogador vez')
 		self.partida.jogadorOutro.initialize(self.jogador2[2])
-		print('funcionando jogador outro')
 		self.partida.inicioPartida()
-		print('funcionando inicio partida')
 		self.initFrame.destroy()
 		self.createTable()
-		self.createHand(1)
-		self.createHand(2)
+		player_local = self.start_status.get_players()
+		self.player_local_id = None
+		if player_local[0][1] == self.start_status.get_local_id():
+			self.player_local_id = player_local[0][2]
+		else:
+			self.player_local_id = player_local[1][1]
+		self.createHand(self.player_local_id)
 		self.createButtons()
 		self.definePaleta(0)
 		self.tableFrame.pack()
@@ -176,7 +165,7 @@ class Interface(DogPlayerInterface):
 	
 	def passarTurno(self):
 		jogador = self.partida.getJogadorVez()
-		if self.start_status.get_local_id() == jogador.getId():
+		if self.player_local_id == jogador.getId():
 			vitoria_rodada = self.mesa.avaliaVitoria()
 			if vitoria_rodada:
 				self.partida.proximaRodada()
@@ -193,8 +182,8 @@ class Interface(DogPlayerInterface):
 		
 	def baixarCarta(self):
 		jogador = self.partida.getJogadorVez()
-		if self.start_status.get_local_id() == jogador.getId():
-			if jogador.baixou_carta == False:
+		if self.player_local_id == jogador.getId():
+			if jogador.getJaBaixou() == False:
 				self.messageView.clear()
 				self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
 				self.messageView[0].grid(row=0, column=0)
@@ -205,8 +194,8 @@ class Interface(DogPlayerInterface):
 
 	def mudarPaleta(self):
 		jogador = self.partida.getJogadorVez()
-		if self.start_status.get_local_id() == jogador.getId():
-			if jogador.mudou_paleta == False:
+		if self.player_local_id == jogador.getId():
+			if jogador.getJaMudou() == False:
 				self.messageView.clear()
 				self.messageView.append(Label(self.tableFrame, text="Mudou a paleta"))
 				self.messageView[0].grid(row=0, column=0)
@@ -250,7 +239,7 @@ class Interface(DogPlayerInterface):
 
 	def receberJogada(self, jogada):
 		if jogada == 0:
-			self.definePaleta(self.cor_mudar)
+			self.definePaleta(self.cor_mudar-1)
 		self.removeCarta(self.carta_retirar)
 	
 	def removeCarta(self, carta):

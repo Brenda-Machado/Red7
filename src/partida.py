@@ -12,8 +12,8 @@ class Partida():
         self.jogadorVez = jogadorVez
         self.jogadorOutro = jogadorOutro
         self.baralho = []
-        for i in range(7):
-            for j in range(7):
+        for i in range(1, 8):
+            for j in range(1, 8):
                 self.baralho.append((j, i))
     
     def getStatus(self):
