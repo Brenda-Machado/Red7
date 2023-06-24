@@ -25,10 +25,16 @@ class Mesa():
     def mudaRegra(self, cor):
         self.regraAtual = cor
         self.paleta.mudaRegra(cor)
+    
+    def getPaleta(self):
+        return self.paleta
+    
+    def getRegraAtual(self):
+        return self.regraAtual
 
     def atualizaMesa(self, carta):
-        jogadorVez = Partida.getJogadorVez()
-        if jogadorVez.id == 1:
+        jogador = Partida.getJogadorVez() # DECIDIR COMO VAI SER FEITA A ASSOCIAÇÂO
+        if jogador.getId() == 1:
             self.mesaJogador1[carta.cor] = carta.numero
         else:
             self.mesaJogador2[carta.cor] = carta.numero

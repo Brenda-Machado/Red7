@@ -14,6 +14,27 @@ class Jogador():
         self.ja_baixou = False
         self.ja_mudou = False
         self.partida_iniciou = False
+    
+    def getId(self):
+        return self.id
+    
+    def getVencedor(self):
+        return self.vencedor
+    
+    def getMao(self):
+        return self.mao
+    
+    def getTurno(self):
+        return self.turno
+    
+    def getJaBaixou(self):
+        return self.ja_baixou
+    
+    def getJaMudou(self):
+        return self.ja_mudou
+    
+    def getPartidaIniciou(self):
+        return self.partida_iniciou 
 
     def initialize(self, id):
         self.id = id
@@ -24,8 +45,17 @@ class Jogador():
     def atualizaVencedor(self):
         self.vencedor = not self.vencedor
     
+    def setjaBaixou(self, valor):
+        self.ja_baixou = valor
+    
+    def setjaMudou(self, valor):
+        self.ja_mudou = valor
+    
     def inicioPartida(self):
         self.partida_iniciou = True
+    
+    def atualizaMao(self, carta):
+        self.mao.remove(carta)
     
     def criaMao(self, baralho: dict):
         for i in range(7):

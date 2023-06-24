@@ -21,17 +21,17 @@ class Partida():
     def getStatus(self):
         return self.status
     
-    def getJoagadorVez(self):
+    def getJogadorVez(self):
         return self.jogadorVez
 
-    def getJoagadorOutro(self):
+    def getJogadorOutro(self):
         return self.jogadorOutro
     
     def atualizaJogador(self, jogada):
         if jogada == 0:
-            self.jogadorVez.ja_baixou = True
+            self.jogadorVez.setjaBaixou(True)
         elif jogada == 1:
-            self.jogadorVez.ja_mudou = True
+            self.jogadorVez.setjaMudou(True)
     
     def proximaRodada(self):
         self.jogadorVez.atualizaVez()
@@ -57,7 +57,7 @@ class Partida():
         self.jogadorOutro.criaMao(baralho2)
     
     def atualizaMao(self, carta):
-        self.jogadorVez.mao.remove(carta)
+        self.jogadorVez.atualizaMao(carta)
     
     def trocaVez(self):
         self.jogadorVez.atualizaVez()
@@ -72,3 +72,7 @@ class Partida():
     
     def resetPartida(self):
         self.status = 0
+
+
+
+        
