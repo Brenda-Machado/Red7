@@ -129,8 +129,8 @@ class Interface(DogPlayerInterface):
 	
 	def iniciar(self):
 		self.partida = Partida(Jogador(), Jogador())
-		self.partida.jogadorVez.initialize(self.jogador1[1])
-		self.partida.jogadorOutro.initialize(self.jogador2[1])
+		self.partida.jogadorVez.initialize(self.jogador1[2])
+		self.partida.jogadorOutro.initialize(self.jogador2[2])
 		self.partida.inicioPartida()
 		self.initFrame.destroy()
 		self.createTable()
@@ -152,7 +152,7 @@ class Interface(DogPlayerInterface):
 	
 	def passarTurno(self):
 		jogador = self.partida.getJogadorVez()
-		if self.start_status.get_local_id() == jogador.get_id():
+		if self.start_status.get_local_id() == jogador.getId():
 			vitoria_rodada = self.mesa.avaliaVitoria()
 			if vitoria_rodada:
 				self.partida.proximaRodada()
@@ -169,7 +169,7 @@ class Interface(DogPlayerInterface):
 		
 	def baixarCarta(self):
 		jogador = self.partida.getJogadorVez()
-		if self.start_status.get_local_id() == jogador.get_id():
+		if self.start_status.get_local_id() == jogador.getId():
 			if jogador.baixou_carta == False:
 				self.messageView.clear()
 				self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
@@ -181,7 +181,7 @@ class Interface(DogPlayerInterface):
 
 	def mudarPaleta(self):
 		jogador = self.partida.getJogadorVez()
-		if self.start_status.get_local_id() == jogador.get_id():
+		if self.start_status.get_local_id() == jogador.getId():
 			if jogador.mudou_paleta == False:
 				self.messageView.clear()
 				self.messageView.append(Label(self.tableFrame, text="Mudou a paleta"))
@@ -244,7 +244,7 @@ class Interface(DogPlayerInterface):
 			self.tablePlayer2View.append(Label(self.tablePlayer2Frame, (self.deckCards[carta[0]][carta[1]])))
 			self.tablePlayer2View[(7 - len(self.baralho_jogador2)) - 1].grid(row=0, column= (7 - len(self.baralho_jogador2)) - 1)
 	
-	def avisoDesconexao(self):
+	def receive_withdrawal_notification(self):
 		self.partida.abandonoPartida()
 		self.messageView.clear()
 		self.messageView.append(Label(self.tableFrame, text="Oponente desconectou"))
