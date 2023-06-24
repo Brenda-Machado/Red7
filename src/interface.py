@@ -242,6 +242,14 @@ class Interface(DogPlayerInterface):
 		else:
 			self.tablePlayer2View.append(Label(self.tablePlayer2Frame, (self.deckCards[carta[0]][carta[1]])))
 			self.tablePlayer2View[(7 - len(self.baralho_jogador2)) - 1].grid(row=0, column= (7 - len(self.baralho_jogador2)) - 1)
+	
+	def avisoDesconexao(self):
+		self.partida.abandonoPartida()
+		self.messageView.clear()
+		self.messageView.append(Label(self.tableFrame, text="Oponente desconectou"))
+		self.messageView[0].grid(row=0, column=0)
+		self.messageView[0].place(x=500, y=500)
+		self.messageFrame.pack()
 
 Interface()
 
