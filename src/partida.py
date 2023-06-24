@@ -51,10 +51,10 @@ class Partida():
         baralho2 = []
         for i in range(7):
             carta = random.choice(self.baralho)
-            baralho1.append({"cor": carta[0], "numero": carta[1]})
+            baralho1[i] = (carta[0], carta[1])
             self.baralho.remove(carta)
             carta = random.choice(self.baralho)
-            baralho2.append({"cor": carta[0], "numero": carta[1]})
+            baralho2[i] = (carta[0], carta[1])
             self.baralho.remove(carta)
 
         self.jogadorVez.criaMao(baralho1)
