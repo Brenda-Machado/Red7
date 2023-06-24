@@ -97,7 +97,7 @@ class Interface(DogPlayerInterface):
 		jogador = self.partida.get_jogador(jogador_id)
 		print(jogador_id)
 		if jogador_id == 1: 
-			baralho = jogador.get_mao()
+			baralho = jogador.getMao()
 			print(baralho)
 			for carta in baralho:
 				self.baralho_jogador1.append(baralho[carta])
