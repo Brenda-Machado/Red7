@@ -47,7 +47,9 @@ class Interface(DogPlayerInterface):
 		self.carta_retirar = None
 		self.cor_mudar = None
 		self.mesa_jogador1 = []
-		self.mesa_jogador2 = [] 
+		self.mesa_jogador2 = []
+		self.baralho_jogador1 = []
+		self.baralho_jogador2 = []
 	
 		self.loadImages()
 		self.loadBaralho()
