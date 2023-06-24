@@ -24,6 +24,8 @@ class Interface(DogPlayerInterface):
 		self.mainWindow["bg"]="white"
 		self.initFrame = Frame(self.mainWindow)
 		self.tableFrame = Frame(self.mainWindow)
+		self.tablePlayer1Frame = Frame(self.tableFrame)
+		self.tablePlayer2Frame = Frame(self.tableFrame)
 		self.butttonFrame = Frame(self.mainWindow)
 		self.handFrame = Frame(self.mainWindow)
 		self.paletaFrame = Frame(self.mainWindow)
@@ -34,14 +36,18 @@ class Interface(DogPlayerInterface):
 		self.handView=[]
 		self.paletaView=[]
 		self.messageView=[]
+		self.tablePlayer1View = []
+		self.tablePlayer2View = [] 
 
 		self.mesa = Mesa()
 		self.jogador1 = None
 		self.jogador2 = None
 		self.partida = None
 		self.start_status = None
-		self.baralho_jogador1 = []
-		self.baralho_jogador2 = [] # variáveis para mapeamento do view para o baralho dos jogadores
+		self.carta_retirar = None
+		self.cor_mudar = None
+		self.mesa_jogador1 = []
+		self.mesa_jogador2 = [] 
 	
 		self.loadImages()
 		self.loadBaralho()
@@ -69,8 +75,8 @@ class Interface(DogPlayerInterface):
 	def loadBaralho(self):
 		self.deckCards=[]
 		self.deck = Image.open("images/cards_deck.png")
-		for i in range(1, 8):
-			for j in range(1,8):
+		for i in range(0, 7):
+			for j in range(1, 8):
 				self.deckCards.append(ImageTk.PhotoImage(self.deck.crop((99*(j-1), 148*(i-1), 99*j, 148*i))))
 
 
@@ -84,9 +90,12 @@ class Interface(DogPlayerInterface):
 		self.paletaView[0].grid(row=0, column=0)
 		
 
-	def createHand(self):
-		for i in range(0, 7):
-			self.handView.append(Label(self.handFrame, image=random.choice(self.deckCards)))
+	def createHand(self, jogador_id):
+		if jogador_id == 1:
+			baralho = self.mesa.mesaJogador1
+		for carta in baralho:
+			self.baralho_jogador1.append(baralho[carta])
+			self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
 			self.handView[i].grid(row=0, column=i)
 	
 	def createButtonIniciar(self):
@@ -124,7 +133,8 @@ class Interface(DogPlayerInterface):
 		self.partida.inicioPartida()
 		self.initFrame.destroy()
 		self.createTable()
-		self.createHand()
+		self.createHand(1)
+		self.createHand(2)
 		self.createButtons()
 		self.definePaleta(0)
 		self.tableFrame.pack()
@@ -188,11 +198,11 @@ class Interface(DogPlayerInterface):
 			jogador = self.partida.getJogadorVez()
 			if jogador.id == 1:
 				self.partida.atualizaMao(self.baralho_jogador1[i])
-				self.baralho_jogador1.pop(i)
+				self.carta_retirar = i
 				self.mesa.atualizaMesa(self.baralho_jogador1[i])
 			else:
 				self.partida.atualizaMao(self.baralho_jogador2[i])
-				self.baralho_jogador2.pop(i)
+				self.carta_retirar = i
 				self.mesa.atualizaMesa(self.baralho_jogador2[i])
 			self.partida.atualizaJogador(0)
 		else:
@@ -203,17 +213,35 @@ class Interface(DogPlayerInterface):
 				if self.baralho_jogador1[i][0] != self.mesa.paleta.getCorAtual():
 					self.partida.atualizaMao(self.baralho_jogador1[i])
 					self.mesa.mudaRegra(self.baralho_jogador1[i][0])
-					self.definePaleta(self.baralho_jogador1[i][0])
-					self.baralho_jogador1.pop(i)
+					self.cor_mudar = self.baralho_jogador1[i][0]
+					self.carta_retirar = i
 					
 			else:
 				if self.baralho_jogador2[i][0] != self.mesa.paleta.getCorAtual():
 					self.partida.atualizaMao(self.baralho_jogador2[i])
 					self.mesa.mudaRegra(self.baralho_jogador2[i][0])
-					self.definePaleta(self.baralho_jogador2[i][0])
-					self.baralho_jogador2.pop(i)
+					self.cor_mudar = self.baralho_jogador2[i][0]
+					self.carta_retirar = i
 			self.partida.atualizaJogador(1)
 
+	def receberJogada(self, jogada):
+		if jogada == 0:
+			self.definePaleta(self.cor_mudar)
+		self.removeCarta(self.carta_retirar)
+	
+	def removeCarta(self, carta):
+		if self.start_status.get_local_id() == 1:
+			self.baralho_jogador1.pop(carta)
+		else:
+			self.baralho_jogador2.pop(carta)
+
+	def adicionarCarta(self, carta):
+		if self.start_status.get_local_id() == 1:
+			self.tablePlayer1View.append(Label(self.tablePlayer1Frame, (self.deckCards[carta[0]][carta[1]])))
+			self.tablePlayer1View[(7 - len(self.baralho_jogador1)) - 1].grid(row=0, column= (7 - len(self.baralho_jogador1)) - 1)
+		else:
+			self.tablePlayer2View.append(Label(self.tablePlayer2Frame, (self.deckCards[carta[0]][carta[1]])))
+			self.tablePlayer2View[(7 - len(self.baralho_jogador2)) - 1].grid(row=0, column= (7 - len(self.baralho_jogador2)) - 1)
 
 Interface()
 

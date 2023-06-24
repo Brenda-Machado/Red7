@@ -25,6 +25,13 @@ class Mesa():
     def mudaRegra(self, cor):
         self.regraAtual = cor
         self.paleta.mudaRegra(cor)
+
+    def atualizaMesa(self, carta):
+        jogadorVez = Partida.getJogadorVez()
+        if jogadorVez.id == 1:
+            self.mesaJogador1[carta.cor] = carta.numero
+        else:
+            self.mesaJogador2[carta.cor] = carta.numero
     
     def avaliaVitoria(self):
         color = self.paleta.getCorAtual()
