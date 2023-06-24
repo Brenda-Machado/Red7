@@ -190,7 +190,6 @@ class Interface(DogPlayerInterface):
 				self.messageFrame.pack()
 				for i in range(0, 7):
 					self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 1))
-		self.definePaleta(random.randint(0,6))
 
 	def selecionarCarta(self, i, operacao):
 		if operacao == 0:
