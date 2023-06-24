@@ -21,6 +21,14 @@ class Partida():
     def getStatus(self):
         return self.status
     
+    def get_jogador(self, id):
+        if self.jogadorVez.getId() == id:
+            return self.jogadorVez
+        elif self.jogadorOutro.getId() == id:
+            return self.jogadorOutro
+        else:
+            return None
+    
     def getJogadorVez(self):
         return self.jogadorVez
 
@@ -75,4 +83,3 @@ class Partida():
 
 
 
-        

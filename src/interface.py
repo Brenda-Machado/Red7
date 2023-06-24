@@ -94,16 +94,28 @@ class Interface(DogPlayerInterface):
 	def createHand(self, jogador_id):
 		baralho = []
 		count = 0
+		jogador = self.partida.get_jogador(jogador_id)
 		print(jogador_id)
-		if jogador_id == 1:
-			baralho = self.mesa.mesaJogador1
+		if jogador_id == self.start_status.get_local_id() and jogador_id == 1:
+			baralho = jogador.get_mao()
+			print(baralho)
 			for carta in baralho:
 				self.baralho_jogador1.append(baralho[carta])
 				self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
 				self.handView[count].grid(row=0, column=count)
 				count += 1
 				print('funcionando hand')
-	
+
+		elif jogador_id == self.start_status.get_local_id() and jogador_id == 2:	
+			baralho = jogador.get_mao()
+			print(baralho)
+			for carta in baralho:
+				self.baralho_jogador2.append(baralho[carta])
+				self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
+				self.handView[count].grid(row=0, column=count)
+				count += 1
+				print('funcionando hand')
+
 	def createButtonIniciar(self):
 		self.initView.append(Button(self.butttonFrame, text="Iniciar", command=self.iniciarPartida))
 		self.initView[1].grid(row=0, column=1)
