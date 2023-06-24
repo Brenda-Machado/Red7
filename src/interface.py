@@ -94,6 +94,7 @@ class Interface(DogPlayerInterface):
 	def createHand(self, jogador_id):
 		baralho = []
 		count = 0
+		print(jogador_id)
 		if jogador_id == 1:
 			baralho = self.mesa.mesaJogador1
 			for carta in baralho:
