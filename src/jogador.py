@@ -59,5 +59,5 @@ class Jogador():
     
     def criaMao(self, baralho: dict):
         for i in range(7):
-            carta = Carta(baralho[i]["cor"], baralho[i]["numero"])
+            carta = Carta(baralho[i][0], baralho[i][1])
             self.mao.append(carta)

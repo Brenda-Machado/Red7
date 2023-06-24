@@ -103,7 +103,7 @@ class Interface(DogPlayerInterface):
 			print(baralho)
 			for carta in baralho:
 				self.baralho_jogador1.append(carta)
-				self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
+				self.handView.append(Label(self.handFrame, image=(self.deckCards[carta.getCor()][carta.getNumero()])))
 				self.handView[count].grid(row=0, column=count)
 				count += 1
 				print('funcionando hand')

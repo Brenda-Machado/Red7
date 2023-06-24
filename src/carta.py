@@ -7,3 +7,9 @@ class Carta():
     def __init__(self, cor, numero):
         self.cor = cor
         self.numero = numero
+
+    def getCor(self):
+        return self.cor
+    
+    def getNumero(self):
+        return self.numero
