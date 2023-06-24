@@ -24,9 +24,7 @@ class Partida():
             return self.jogadorVez
         elif self.jogadorOutro.getId() == id:
             return self.jogadorOutro
-        else:
-            return None
-    
+
     def getJogadorVez(self):
         return self.jogadorVez
 
