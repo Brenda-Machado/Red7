@@ -36,9 +36,12 @@ class Interface(DogPlayerInterface):
 		self.messageView=[]
 
 		self.mesa = Mesa()
-		self.jogador1 = Jogador()
-		self.jogador2 = Jogador()
+		self.jogador1 = None
+		self.jogador2 = None
 		self.partida = None
+		self.start_status = None
+		self.baralho_jogador1 = []
+		self.baralho_jogador2 = [] # variáveis para mapeamento do view para o baralho dos jogadores
 	
 		self.loadImages()
 		self.loadBaralho()
@@ -105,18 +108,19 @@ class Interface(DogPlayerInterface):
 		self.butttonFrame.pack()
 	
 	def iniciarPartida(self):
-		start_status = self.dog_server_interface.start_match(2)
-		message = start_status.get_message()
+		self.start_status = self.dog_server_interface.start_match(2)
+		message = self.start_status.get_message()
 		messagebox.showinfo(message=message)
 		if message == "Partida iniciada":
+			players = self.start_status.get_players()
+			self.jogador1 = players[0]
+			self.jogador2 = players[1]
 			self.iniciar()
-
-	def receive_start(self, start_status):
-		message = start_status.get_message()
-		messagebox.showinfo(message=message)
-
+	
 	def iniciar(self):
-		self.partida = Partida(self.jogador1, self.jogador2)
+		self.partida = Partida(Jogador, Jogador)
+		self.partida.jogadorVez.initialize(self.jogador2[1])
+		self.partida.jogadorOutro.initialize(self.jogador2[1])
 		self.partida.inicioPartida()
 		self.initFrame.destroy()
 		self.createTable()
@@ -130,31 +134,86 @@ class Interface(DogPlayerInterface):
 		self.paletaFrame.place(x=1000, y=500)
 		self.handFrame.place(x=100, y=700)
 		self.butttonFrame.place(x=300, y=600)
+
+	def receive_start(self, start_status):
+		message = start_status.get_message()
+		messagebox.showinfo(message=message)
 	
 	def passarTurno(self):
-		self.messageView.clear()
-		self.messageView.append(Label(self.tableFrame, text="Passou o turno"))
-		self.messageView[0].grid(row=0, column=0)
-		self.messageView[0].place(x=500, y=500)
-		self.messageFrame.pack()
+		jogador = self.partida.getJogadorVez()
+		if self.start_status.get_local_id() == jogador.get_id():
+			vitoria_rodada = self.mesa.avaliaVitoria()
+			if vitoria_rodada:
+				self.partida.proximaRodada()
+				self.messageView.clear()
+				self.messageView.append(Label(self.tableFrame, text="Passou o turno"))
+				self.messageView[0].grid(row=0, column=0)
+				self.messageView[0].place(x=500, y=500)
+				self.messageFrame.pack()
+			else:
+				self.partida.fimPartida()
+				self.partida.getStatus()
+				self.atualizaStatus()
+				self.mensagemDerrota()
 		
 	def baixarCarta(self):
-		self.messageView.clear()
-		self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
-		self.messageView[0].grid(row=0, column=0)
-		self.messageView[0].place(x=500, y=500)
-		self.messageFrame.pack()
-		for i in range(0, 7):
-			self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i))
+		jogador = self.partida.getJogadorVez()
+		if self.start_status.get_local_id() == jogador.get_id():
+			if jogador.baixou_carta == False:
+				self.messageView.clear()
+				self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
+				self.messageView[0].grid(row=0, column=0)
+				self.messageView[0].place(x=500, y=500)
+				self.messageFrame.pack()
+				for i in range(0, 7):
+					self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 0))
 
 	def mudarPaleta(self):
-		self.messageView.clear()
-		self.messageView.append(Label(self.tableFrame, text="Mudou a paleta"))
-		self.messageView[0].grid(row=0, column=0)
-		self.messageView[0].place(x=500, y=500)
-		self.messageFrame.pack()
+		jogador = self.partida.getJogadorVez()
+		if self.start_status.get_local_id() == jogador.get_id():
+			if jogador.mudou_paleta == False:
+				self.messageView.clear()
+				self.messageView.append(Label(self.tableFrame, text="Mudou a paleta"))
+				self.messageView[0].grid(row=0, column=0)
+				self.messageView[0].place(x=500, y=500)
+				self.messageFrame.pack()
+				for i in range(0, 7):
+					self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 1))
 		self.definePaleta(random.randint(0,6))
 
-	def selecionarCarta(self, i):
-		self.messageView.clear()
-		self.handView[i].place(x=500, y=500)
+	def selecionarCarta(self, i, operacao):
+		if operacao == 0:
+			self.messageView.clear()
+			self.handView[i].place(x=500, y=500)
+			jogador = self.partida.getJogadorVez()
+			if jogador.id == 1:
+				self.partida.atualizaMao(self.baralho_jogador1[i])
+				self.baralho_jogador1.pop(i)
+				self.mesa.atualizaMesa(self.baralho_jogador1[i])
+			else:
+				self.partida.atualizaMao(self.baralho_jogador2[i])
+				self.baralho_jogador2.pop(i)
+				self.mesa.atualizaMesa(self.baralho_jogador2[i])
+			self.partida.atualizaJogador(0)
+		else:
+			self.messageView.clear()
+			self.handView[i].place(x=500, y=500)
+			jogador = self.partida.getJogadorVez()
+			if jogador.id == 1:
+				if self.baralho_jogador1[i][0] != self.mesa.paleta.getCorAtual():
+					self.partida.atualizaMao(self.baralho_jogador1[i])
+					self.mesa.mudaRegra(self.baralho_jogador1[i][0])
+					self.definePaleta(self.baralho_jogador1[i][0])
+					self.baralho_jogador1.pop(i)
+					
+			else:
+				if self.baralho_jogador2[i][0] != self.mesa.paleta.getCorAtual():
+					self.partida.atualizaMao(self.baralho_jogador2[i])
+					self.mesa.mudaRegra(self.baralho_jogador2[i][0])
+					self.definePaleta(self.baralho_jogador2[i][0])
+					self.baralho_jogador2.pop(i)
+			self.partida.atualizaJogador(1)
+
+
+Interface()
+

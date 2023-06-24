@@ -7,7 +7,6 @@ from carta import Carta
 
 class Jogador():
     def __init__(self):
-        self.nome = ""
         self.id = ""
         self.vencedor = False
         self.mao = []
@@ -16,8 +15,7 @@ class Jogador():
         self.ja_mudou = False
         self.partida_iniciou = False
 
-    def initialize(self, nome, id):
-        self.nome = nome
+    def initialize(self, id):
         self.id = id
     
     def atualizaVez(self):
