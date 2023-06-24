@@ -11,8 +11,6 @@ class Partida():
         self.status = 0
         self.jogadorVez = jogadorVez
         self.jogadorOutro = jogadorOutro
-        self.jogadorVez.initialize(1)
-        self.jogadorOutro.initialize(2)
         self.baralho = []
         for i in range(7):
             for j in range(7):
