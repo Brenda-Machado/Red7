@@ -123,6 +123,7 @@ class Interface(DogPlayerInterface):
 		messagebox.showinfo(message=message)
 		if message == "Partida iniciada":
 			players = self.start_status.get_players()
+			print(players)
 			self.jogador1 = players[0]
 			self.jogador2 = players[1]
 			self.iniciar()
