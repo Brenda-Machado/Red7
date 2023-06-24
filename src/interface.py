@@ -81,6 +81,7 @@ class Interface(DogPlayerInterface):
 
 
 	def createTable(self):
+		print('funcionando table')
 		self.tableView.append(Label(self.tableFrame, image=self.table))
 		self.tableView[0].grid(row=0, column=0)
 
@@ -92,12 +93,14 @@ class Interface(DogPlayerInterface):
 
 	def createHand(self, jogador_id):
 		baralho = []
+		count = 0
 		if jogador_id == 1:
 			baralho = self.mesa.mesaJogador1
-		for carta in baralho:
-			self.baralho_jogador1.append(baralho[carta])
-			self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
-			self.handView[i].grid(row=0, column=i)
+			for carta in baralho:
+				self.baralho_jogador1.append(baralho[carta])
+				self.handView.append(Label(self.handFrame, image=(self.deckCards[carta[0]][carta[1]])))
+				self.handView[count].grid(row=0, column=count)
+				print('funcionando hand')
 	
 	def createButtonIniciar(self):
 		self.initView.append(Button(self.butttonFrame, text="Iniciar", command=self.iniciarPartida))
@@ -130,9 +133,13 @@ class Interface(DogPlayerInterface):
 	
 	def iniciar(self):
 		self.partida = Partida(Jogador(), Jogador())
+		print('funcionando criar partida')
 		self.partida.jogadorVez.initialize(self.jogador1[2])
+		print('funcionando jogador vez')
 		self.partida.jogadorOutro.initialize(self.jogador2[2])
+		print('funcionando jogador outro')
 		self.partida.inicioPartida()
+		print('funcionando inicio partida')
 		self.initFrame.destroy()
 		self.createTable()
 		self.createHand(1)
