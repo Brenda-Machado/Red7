@@ -91,6 +91,7 @@ class Interface(DogPlayerInterface):
 		
 
 	def createHand(self, jogador_id):
+		baralho = []
 		if jogador_id == 1:
 			baralho = self.mesa.mesaJogador1
 		for carta in baralho:
@@ -127,8 +128,8 @@ class Interface(DogPlayerInterface):
 			self.iniciar()
 	
 	def iniciar(self):
-		self.partida = Partida(Jogador, Jogador)
-		self.partida.jogadorVez.initialize(self.jogador2[1])
+		self.partida = Partida(Jogador(), Jogador())
+		self.partida.jogadorVez.initialize(self.jogador1[1])
 		self.partida.jogadorOutro.initialize(self.jogador2[1])
 		self.partida.inicioPartida()
 		self.initFrame.destroy()
