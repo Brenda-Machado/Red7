@@ -134,11 +134,12 @@ class Interface(DogPlayerInterface):
 		messagebox.showinfo(message=message)
 		if message == "Partida iniciada":
 			players = self.start_status.get_players()
+			messagebox.showinfo(message=self.tart_status.get_message())
 			print(players)
 			self.jogador1 = players[0]
 			self.jogador2 = players[1]
 			self.iniciar()
-	
+
 	def iniciar(self):
 		self.partida = Partida(Jogador(), Jogador())
 		self.mesa = Mesa(self.partida)
@@ -229,7 +230,6 @@ class Interface(DogPlayerInterface):
 				numero = carta[1] - 1
 				cor = carta[0] - 1 
 				self.mesa.atualizaMesa((cor, numero))
-				self.adicionarCarta(self.carta_retirar)
 			self.partida.atualizaJogador(0)
 		else:
 			jogador = self.partida.getJogadorVez()
@@ -251,6 +251,8 @@ class Interface(DogPlayerInterface):
 	def receberJogada(self, jogada):
 		if jogada == 1:
 			self.definePaleta(self.cor_mudar-2)
+		else:
+			self.adicionarCarta(self.carta_retirar)
 		self.handView[self.carta_retirar].place(x=500, y=500)
 		self.messageView.clear()
 
