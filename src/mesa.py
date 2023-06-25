@@ -62,8 +62,11 @@ class Mesa():
         return resultado_avaliação
 
     def avaliaRegraVermelha(self, jogadorVez, jogadorOutro):
+        print("Avaliando regra vermelha")
         maior_j_vez = self.maiorMesa(jogadorVez.id, flag = 'vermelho')
+        print("Maior jogador vez: ", maior_j_vez)
         maior_j_o = self.maiorMesa(jogadorOutro.id, flag = 'vermelho')
+        print("Maior jogador outro: ", maior_j_o)
         if maior_j_vez != maior_j_o:
             if maior_j_vez > maior_j_o:
                 return True

@@ -218,11 +218,17 @@ class Interface(DogPlayerInterface):
 			if jogador.id == 1:
 				self.partida.atualizaMao(self.baralho_jogador1[i])
 				self.carta_retirar = i
-				self.mesa.atualizaMesa(self.baralho_jogador1[i])
+				carta = self.baralho_jogador1[i]
+				numero = carta[1] - 1
+				cor = carta[0] - 1 
+				self.mesa.atualizaMesa((cor, numero))
 			else:
 				self.partida.atualizaMao(self.baralho_jogador2[i])
 				self.carta_retirar = i
-				self.mesa.atualizaMesa(self.baralho_jogador2[i])
+				carta = self.baralho_jogador2[i]
+				numero = carta[1] - 1
+				cor = carta[0] - 1 
+				self.mesa.atualizaMesa((cor, numero))
 				self.adicionarCarta(self.carta_retirar)
 			self.partida.atualizaJogador(0)
 		else:
@@ -231,14 +237,12 @@ class Interface(DogPlayerInterface):
 				if self.baralho_jogador1[i][0] != self.mesa.paleta.getCorAtual():
 					self.partida.atualizaMao(self.baralho_jogador1[i])
 					self.mesa.mudaRegra(self.baralho_jogador1[i][0])
-					print(self.baralho_jogador1[i][0])
 					self.cor_mudar = self.baralho_jogador1[i][0]
 					self.carta_retirar = i				
 			else:
 				if self.baralho_jogador2[i][0] != self.mesa.paleta.getCorAtual():
 					self.partida.atualizaMao(self.baralho_jogador2[i])
 					self.mesa.mudaRegra(self.baralho_jogador2[i][0])
-					print(self.baralho_jogador2[i][0])
 					self.cor_mudar = self.baralho_jogador2[i][0]
 					self.carta_retirar = i
 			self.partida.atualizaJogador(1)
@@ -251,21 +255,34 @@ class Interface(DogPlayerInterface):
 		self.messageView.clear()
 
 	def adicionarCarta(self, carta):
-		cor = self.baralho_jogador2[carta][0]
-		numero = self.baralho_jogador2[carta][1]
-		if self.start_status.get_local_id() == 1:
+		jogador = self.partida.getJogadorVez()
+		if jogador.id == 1:
+			cor = self.baralho_jogador1[carta][0]
+			numero = self.baralho_jogador1[carta][1]
 			carta_label = Label(self.tablePlayer1Frame, image=self.deckCards[cor-1][numero-1])
 			carta_label.grid(row=0, column=len(self.tablePlayer1View))
 			self.tablePlayer1View.append(carta_label)
 		else:
+			cor = self.baralho_jogador2[carta][0]
+			numero = self.baralho_jogador2[carta][1]
 			carta_label = Label(self.tablePlayer2Frame, image=self.deckCards[cor-1][numero-1])
 			carta_label.grid(row=0, column=len(self.tablePlayer2View))
 			self.tablePlayer2View.append(carta_label)
 	
 	def receive_withdrawal_notification(self):
 		self.partida.abandonoPartida()
+		self.avisoDesconexao()
+
+	def avisoDesconexao(self):
 		self.messageView.clear()
 		self.messageView.append(Label(self.tableFrame, text="Oponente desconectou"))
+		self.messageView[0].grid(row=0, column=0)
+		self.messageView[0].place(x=500, y=500)
+		self.messageFrame.pack()
+	
+	def mensagemDerrota(self):
+		self.messageView.clear()
+		self.messageView.append(Label(self.tableFrame, text="Você perdeu"))
 		self.messageView[0].grid(row=0, column=0)
 		self.messageView[0].place(x=500, y=500)
 		self.messageFrame.pack()
