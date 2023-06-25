@@ -9,8 +9,8 @@ from carta import Carta
 
 class Mesa():
     def __init__(self, partida : Partida):
-        self.mesaJogador1 = {} # recebe uma tupla em que o primeiro é cor e o segundo é número
-        self.mesaJogador2 = {}
+        self.mesaJogador1 = [] # recebe uma tupla em que o primeiro é cor e o segundo é número
+        self.mesaJogador2 = []
         self.paleta = Paleta()
         self.partida = partida
         self.regraAtual = 1
@@ -36,9 +36,9 @@ class Mesa():
     def atualizaMesa(self, carta):
         jogador = self.partida.getJogadorVez()
         if jogador.getId() == 1:
-            self.mesaJogador1[carta.cor] = carta.numero
+            self.mesaJogador1.append(carta)
         else:
-            self.mesaJogador2[carta.cor] = carta.numero
+            self.mesaJogador2.append(carta)
     
     def avaliaVitoria(self):
         color = self.paleta.getCorAtual()

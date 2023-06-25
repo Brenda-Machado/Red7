@@ -55,7 +55,10 @@ class Jogador():
         self.partida_iniciou = True
     
     def atualizaMao(self, carta):
-        self.mao.remove(carta)
+        for item in self.mao:
+            if item == carta:
+                self.mao.remove(item)
+                break
     
     def criaMao(self, baralho: dict):
         for i in range(7):
