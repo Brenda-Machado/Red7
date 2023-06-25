@@ -24,8 +24,8 @@ class Interface(DogPlayerInterface):
 		self.mainWindow["bg"]="white"
 		self.initFrame = Frame(self.mainWindow)
 		self.tableFrame = Frame(self.mainWindow)
-		self.tablePlayer1Frame = Frame(self.tableFrame)
-		self.tablePlayer2Frame = Frame(self.tableFrame)
+		self.tablePlayer1Frame = Frame(self.mainWindow)
+		self.tablePlayer2Frame = Frame(self.mainWindow)
 		self.butttonFrame = Frame(self.mainWindow)
 		self.handFrame = Frame(self.mainWindow)
 		self.paletaFrame = Frame(self.mainWindow)
@@ -160,9 +160,13 @@ class Interface(DogPlayerInterface):
 		self.handFrame.pack()
 		self.paletaFrame.pack()
 		self.butttonFrame.pack()
+		self.tablePlayer1Frame.pack()
+		self.tablePlayer2Frame.pack()
 		self.paletaFrame.place(x=1000, y=500)
 		self.handFrame.place(x=100, y=700)
 		self.butttonFrame.place(x=300, y=600)
+		self.tablePlayer1Frame.place(x=400, y=500)
+		self.tablePlayer2Frame.place(x=400, y=300)
 
 	def receive_start(self, start_status):
 		message = start_status.get_message()
@@ -243,20 +247,22 @@ class Interface(DogPlayerInterface):
 	def receberJogada(self, jogada):
 		if jogada == 1:
 			self.definePaleta(self.cor_mudar-2)
-			self.handView[self.carta_retirar].place(x=500, y=500)
+		self.handView[self.carta_retirar].place(x=500, y=500)
 		self.messageView.clear()
 
 	def adicionarCarta(self, carta):
 		cor = self.baralho_jogador2[carta][0]
 		numero = self.baralho_jogador2[carta][1]
 		if self.start_status.get_local_id() == 1:
-			self.tablePlayer1View.append(Label(self.tablePlayer1Frame, image=self.deckCards[cor-1][numero-1]))
-			self.tablePlayer1View[(len(self.mesa.getMesaJogador1())) - 1].grid(row=0, column= (len(self.mesa.getMesaJogador1())))
-			self.tablePlayer1View[(len(self.mesa.getMesaJogador1())) - 1].place(x=100, y=100)
+			carta_label = Label(self.tablePlayer1Frame, image=self.deckCards[cor-1][numero-1])
+			carta_label.grid(row=0, column=len(self.tablePlayer1View))
+			self.tablePlayer1View.append(carta_label)
 		else:
-			self.tablePlayer2View.append(Label(self.tablePlayer2Frame, image=self.deckCards[cor-1][numero-1]))
-			self.tablePlayer2View[(len(self.mesa.getMesaJogador2())) - 1].grid(row=0, column= (len(self.mesa.getMesaJogador2())))
-			self.tablePlayer2View[(len(self.mesa.getMesaJogador2())) - 1].place(x=100, y=100)
+			carta_label = Label(self.tablePlayer2Frame, image=self.deckCards[cor-1][numero-1])
+			carta_label.grid(row=0, column=len(self.tablePlayer2View))
+			self.tablePlayer2View.append(carta_label)
+		self.tablePlayer1Frame.pack()
+		self.tablePlayer2Frame.pack()
 	
 	def receive_withdrawal_notification(self):
 		self.partida.abandonoPartida()

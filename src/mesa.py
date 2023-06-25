@@ -294,6 +294,7 @@ class Mesa():
             return menor
     
     def contaRepeticao(self, id):
+        cartaConsiderada = (0, 0)
         if id == 1:
             mesa = self.mesaJogador1
         else:
