@@ -165,8 +165,8 @@ class Interface(DogPlayerInterface):
 		self.paletaFrame.place(x=1000, y=500)
 		self.handFrame.place(x=100, y=700)
 		self.butttonFrame.place(x=300, y=600)
-		self.tablePlayer1Frame.place(x=400, y=500)
-		self.tablePlayer2Frame.place(x=400, y=300)
+		self.tablePlayer1Frame.place(x=100, y=500)
+		self.tablePlayer2Frame.place(x=100, y=300)
 
 	def receive_start(self, start_status):
 		message = start_status.get_message()
@@ -261,8 +261,6 @@ class Interface(DogPlayerInterface):
 			carta_label = Label(self.tablePlayer2Frame, image=self.deckCards[cor-1][numero-1])
 			carta_label.grid(row=0, column=len(self.tablePlayer2View))
 			self.tablePlayer2View.append(carta_label)
-		self.tablePlayer1Frame.pack()
-		self.tablePlayer2Frame.pack()
 	
 	def receive_withdrawal_notification(self):
 		self.partida.abandonoPartida()
