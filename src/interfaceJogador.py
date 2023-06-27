@@ -15,7 +15,7 @@ from mesa import Mesa
 from jogador import Jogador
 
 
-class Interface(DogPlayerInterface):
+class InterfaceJogador(DogPlayerInterface):
 	def __init__(self):
 		self.mainWindow = Tk()
 		self.mainWindow.title("Red7")
@@ -174,16 +174,12 @@ class Interface(DogPlayerInterface):
 		messagebox.showinfo(message=message)
 	
 	def passarTurno(self):
-		jogador = self.partida.getJogadorVez()
-		if self.player_local_id == jogador.getId():
+		jogador_turno = self.partida.getJogadorVez()
+		if self.player_local_id == jogador_turno.getId():
 			vitoria_rodada = self.mesa.avaliaVitoria()
-			if vitoria_rodada:
+			if vitoria_rodada == True:
 				self.partida.proximaRodada()
-				self.messageView.clear()
-				self.messageView.append(Label(self.tableFrame, text="Passou o turno"))
-				self.messageView[0].grid(row=0, column=0)
-				self.messageView[0].place(x=500, y=500)
-				self.messageFrame.pack()
+				self.atualizaGUI(3)
 			else:
 				self.partida.fimPartida()
 				self.mensagemDerrota()
@@ -192,25 +188,13 @@ class Interface(DogPlayerInterface):
 		jogador = self.partida.getJogadorVez()
 		if self.player_local_id == jogador.getId():
 			if jogador.getJaBaixou() == False:
-				self.messageView.clear()
-				self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
-				self.messageView[0].grid(row=0, column=0)
-				self.messageView[0].place(x=500, y=500)
-				self.messageFrame.pack()
-				for i in range(0, 7):
-					self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 0))
+				self.atualizaGUI(0)
 
 	def mudarPaleta(self):
 		jogador = self.partida.getJogadorVez()
 		if self.player_local_id == jogador.getId():
 			if jogador.getJaMudou() == False:
-				self.messageView.clear()
-				self.messageView.append(Label(self.tableFrame, text="Mudou a paleta"))
-				self.messageView[0].grid(row=0, column=0)
-				self.messageView[0].place(x=500, y=500)
-				self.messageFrame.pack()
-				for i in range(0, 7):
-					self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 1))
+				self.atualizaGUI(1)
 
 	def selecionarCarta(self, i, operacao):
 		self.messageView.clear()
@@ -253,8 +237,7 @@ class Interface(DogPlayerInterface):
 			self.definePaleta(self.cor_mudar-2)
 		else:
 			self.adicionarCarta(self.carta_retirar)
-		self.handView[self.carta_retirar].place(x=500, y=500)
-		self.messageView.clear()
+		self.atualizaGUI(2)
 
 	def adicionarCarta(self, carta):
 		jogador = self.partida.getJogadorVez()
@@ -288,6 +271,33 @@ class Interface(DogPlayerInterface):
 		self.messageView[0].grid(row=0, column=0)
 		self.messageView[0].place(x=500, y=500)
 		self.messageFrame.pack()
+	
+	def atualizaGUI(self, operacao):
+		if operacao == 0:
+			self.messageView.clear()
+			self.messageView.append(Label(self.tableFrame, text="Selecione uma carta"))
+			self.messageView[0].grid(row=0, column=0)
+			self.messageView[0].place(x=500, y=500)
+			self.messageFrame.pack()
+			for i in range(0, 7):
+				self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 0))
+		elif operacao == 1:
+			self.messageView.clear()
+			self.messageView.append(Label(self.tableFrame, text="Mudou a paleta"))
+			self.messageView[0].grid(row=0, column=0)
+			self.messageView[0].place(x=500, y=500)
+			self.messageFrame.pack()
+			for i in range(0, 7):
+				self.handView[i].bind("<Button-1>", lambda event, i=i: self.selecionarCarta(i, 1))
+		elif operacao == 2:
+			self.handView[self.carta_retirar].place(x=500, y=500)
+			self.messageView.clear()
+		elif operacao == 3:
+			self.messageView.clear()
+			self.messageView.append(Label(self.tableFrame, text="Passou o turno"))
+			self.messageView[0].grid(row=0, column=0)
+			self.messageView[0].place(x=500, y=500)
+			self.messageFrame.pack()
 
-Interface()
+InterfaceJogador()
 
